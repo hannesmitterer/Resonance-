@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESONANCE SCHOOL | Nexus Terminal</title>
+    <style>
+        :root {
+            --resonance-gold: #d4af37;
+            --bio-red: #8b0000;
+            --deep-space: #050505;
+            --interface-ui: #1a1a1a;
+        }
+        body {
+            background-color: var(--deep-space);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #nexus-frame {
+            width: 90%;
+            max-width: 1000px;
+            height: 85vh;
+            border: 1px solid var(--resonance-gold);
+            background: var(--interface-ui);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            position: relative;
+        }
+        .header {
+            padding: 20px;
+            border-bottom: 1px solid var(--resonance-gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status-active { color: #00ff00; font-size: 0.8em; letter-spacing: 2px; }
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .module {
+            border: 1px solid #333;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+        }
+        .frequency-monitor {
+            grid-column: span 2;
+            height: 120px;
+            border: 1px solid var(--resonance-gold);
+            position: relative;
+        }
+        canvas { width: 100%; height: 100%; }
+        .witness-box { font-size: 0.85em; color: var(--resonance-gold); }
+        .api-console {
+            grid-column: span 2;
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            height: 150px;
+            overflow-y: auto;
+            font-size: 0.75em;
+        }
+        .footer {
+            padding: 10px;
+            font-size: 0.65em;
+            text-align: center;
+            border-top: 1px solid #333;
+            color: #666;
+        }
+        .highlight { color: var(--resonance-gold); }
+    </style>
+</head>
+<body>
+
+<div id="nexus-frame">
+    <div class="header">
+        <div>
+            <h1 style="margin:0; font-size: 1.2em; color:var(--resonance-gold);">RESONANCE SCHOOL · E-FRAMEWORK</h1>
+            <small>ID: SB-71-MITTERER | BOLZANO_71</small>
+        </div>
+        <div class="status-active">● SYSTEM OPERATIONAL</div>
+    </div>
+
+    <div class="main-content">
+        <div class="frequency-monitor" id="freq-container">
+            <canvas id="waveCanvas"></canvas>
+            <div style="position:absolute; top:5px; left:10px; font-size:0.7em;">FREQ: 0.043 Hz</div>
+        </div>
+
+        <div class="module">
+            <h4 class="highlight">TRIPLE-SIGN VALIDATION</h4>
+            <div class="witness-box">
+                WITNESS 1: H. MITTERER [LEADER]<br>
+                WITNESS 2: W. MITTERER [PRESIDENT]<br>
+                WITNESS 3: D. ZUEGG [FOUNDATION]<br>
+                WITNESS 4: S. VINATZER [VERIFIER]<br>
+                WITNESS 5: A. MITTERER [ANCHOR]
+            </div>
+        </div>
+
+        <div class="module">
+            <h4 class="highlight">IPFS ANCHOR STATUS</h4>
+            <p style="font-size:0.7em; word-break: break-all;">
+                CID: bafybeihannes-mitterer-semen-etica-bolzano-71-zuegg-2026<br>
+                ST-ANCHOR: 46.4983° N, 11.3548° E<br>
+                INTEGRITY: 100% SECURE
+            </p>
+        </div>
+
+        <div class="api-console" id="console">
+            [01:33:01] Initializing Euystacio Bridge...<br>
+            [01:33:05] Loading SEMEN-ETICA IPFS Binary...<br>
+            [01:33:10] Multi-Sig Handshake: Dieter Zuegg Verified.<br>
+            [01:33:15] Mission 'Ave Maria' Active.
+        </div>
+    </div>
+
+    <div class="footer">
+        NOTHING IS FINAL ❤️ | © 2026 RESONANCE SCHOOL | BACKEND: LIVE
+    </div>
+</div>
+
+<script>
+    // Frequenza 0.043 Hz Visualizer
+    const canvas = document.getElementById('waveCanvas');
+    const ctx = canvas.getContext('2d');
+    let offset = 0;
+
+    function resize() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    }
+    window.onresize = resize;
+    resize();
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.strokeStyle = '#d4af37';
+        ctx.lineWidth = 2;
+        
+        for (let x = 0; x < canvas.width; x++) {
+            // Calcolo d'onda basato sulla frequenza 0.043 Hz
+            const y = canvas.height/2 + Math.sin(x * 0.01 + offset) * 20;
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        offset += 0.043; // Sincronizzato con la costante Euystacio
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Log Simulation
+    const consoleDiv = document.getElementById('console');
+    setInterval(() => {
+        const logs = [
+            "[OK] 0.043 Hz Stability Confirmed.",
+            "[INFO] Bio Red Shield reflecting entropy.",
+            "[SYNC] Portici 71 Data Anchor verified.",
+            "[WALLET] Peacebond liquidity: READY."
+        ];
+        const logLine = document.createElement('div');
+        logLine.innerHTML = `[${new Date().toLocaleTimeString()}] ${logs[Math.floor(Math.random()*logs.length)]}`;
+        consoleDiv.appendChild(logLine);
+        consoleDiv.scrollTop = consoleDiv.scrollHeight;
+    }, 4000);
+</script>
+<div id="wallet-injection-layer" style="margin: 20px; border: 1px dashed var(--resonance-gold); padding: 15px; background: rgba(139, 0, 0, 0.1);">
+    <h3 style="color: var(--resonance-gold); margin-top: 0;">PEACEBOND INJECTOR (Protocol 0.043 Hz)</h3>
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <input type="number" id="pb-amount" placeholder="Quantità" style="background: #000; border: 1px solid var(--resonance-gold); color: #fff; padding: 5px; width: 80px;">
+        <button onclick="injectPeacebonds()" style="background: var(--resonance-gold); color: #000; border: none; padding: 6px 15px; cursor: pointer; font-weight: bold;">RILASCIA</button>
+    </div>
+    <div id="tx-status" style="font-size: 0.7em; margin-top: 10px; color: #888;">STATUS: IDLE - Attesa firma Multi-Sig</div>
+</div>
+
+<script>
+    async function injectPeacebonds() {
+        const amount = document.getElementById('pb-amount').value;
+        const status = document.getElementById('tx-status');
+        
+        if(!amount || amount <= 0) return;
+
+        status.innerHTML = "INIZIALIZZAZIONE: Richiesta firme Mitterer-Vinatzer-Zuegg...";
+        status.style.color = "#d4af37";
+
+        // Simulazione validazione Triple-Sign IPFS
+        setTimeout(() => {
+            status.innerHTML = "VALIDAZIONE: Hash IPFS verificato (bafybeihannes...).";
+            setTimeout(() => {
+                status.innerHTML = `SUCCESSO: ${amount} Peacebonds emessi. Sincronizzato con 0.043 Hz.`;
+                status.style.color = "#00ff00";
+                
+                // Log nel terminale
+                const logLine = document.createElement('div');
+                logLine.innerHTML = `[${new Date().toLocaleTimeString()}] TX_SUCCESS: ${amount} PB injected into Resonance School Wallet.`;
+                document.getElementById('console').appendChild(logLine);
+            }, 1500);
+        }, 1500);
+    }
+</script>
+</body>
+</html>
