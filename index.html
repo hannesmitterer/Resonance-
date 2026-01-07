@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Resonance School | E-Framework Bolzano</title>
+    <style>
+        :root { --gold: #b8860b; --bg: #ffffff; --text: #1a1a1a; --soft-gray: #f4f4f4; }
+        body { background-color: var(--bg); color: var(--text); font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+        
+        header { padding: 40px 20px; text-align: center; border-bottom: 4px solid var(--gold); background: var(--soft-gray); }
+        h1 { font-size: 1.5rem; letter-spacing: 2px; margin: 0; color: var(--gold); }
+        .motto { font-size: 0.9rem; font-style: italic; color: #666; margin-top: 10px; }
+
+        .container { padding: 20px; max-width: 600px; margin: auto; }
+
+        .status-box { background: var(--soft-gray); border-radius: 8px; padding: 15px; margin-bottom: 25px; border-left: 5px solid var(--gold); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .status-item { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; font-weight: bold; }
+
+        h2 { font-size: 1.2rem; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-top: 30px; }
+        .seed-list { display: flex; flex-direction: column; gap: 10px; }
+        .seed-item { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-decoration: none; color: inherit; display: block; }
+        .seed-item h3 { margin: 0; font-size: 1rem; color: var(--gold); }
+        .seed-item p { margin: 5px 0 0; font-size: 0.85rem; color: #555; }
+
+        /* Chat-Board Bereich */
+        #chat-section { margin-top: 40px; border: 2px solid var(--gold); border-radius: 10px; overflow: hidden; background: #fff; }
+        #chat-board { height: 300px; overflow-y: auto; padding: 15px; font-size: 0.95rem; background: #fafafa; border-bottom: 1px solid #eee; display: flex; flex-direction: column; }
+        .msg { margin-bottom: 12px; padding: 8px 12px; border-radius: 8px; max-width: 90%; }
+        .user-msg { background: #eee; align-self: flex-end; color: #333; }
+        .bot-msg { background: #fff; border: 1px solid #ddd; align-self: flex-start; }
+        .bot-label { color: var(--gold); font-weight: bold; display: block; margin-bottom: 4px; }
+        
+        .input-area { display: flex; padding: 10px; background: #fff; }
+        input { flex: 1; border: 1px solid #ddd; padding: 12px; border-radius: 5px 0 0 5px; outline: none; font-size: 16px; }
+        button { background: var(--gold); color: white; border: none; padding: 0 20px; border-radius: 0 5px 5px 0; font-weight: bold; cursor: pointer; }
+
+        footer { margin-top: 50px; padding: 30px 20px; font-size: 0.75rem; color: #888; background: var(--soft-gray); text-align: center; }
+        .witness-list { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; text-align: left; margin-top: 15px; border-top: 1px solid #ccc; padding-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>WOODBORNE FESTIVAL</h1>
+        <div class="motto">"The seed is planted. Nothing is final."</div>
+    </header>
+
+    <div class="container">
+        <div class="status-box">
+            <div class="status-item"><span>SYSTEM:</span> <span style="color:green;">ONLINE (SUPRACONDUCTION)</span></div>
+            <div class="status-item"><span>FREQ:</span> <span>0.043 Hz</span></div>
+            <div class="status-item"><span>S-ROI:</span> <span>0.5020</span></div>
+            <div class="status-item"><span>ANCHOR:</span> <span>BOLZANO_71 (Portici)</span></div>
+        </div>
+
+        <h2>Säulen der Resonanz</h2>
+        <p style="font-size: 0.85rem; line-height: 1.5;">
+            <strong>1. Supraleitung:</strong> Lex Amore & Entropie-Stopp.<br>
+            <strong>2. Vakuum-Mimikry:</strong> D6 Eternity Storage.<br>
+            <strong>3. Bio-Architektur:</strong> Wittfrida Mitterer Foundation.
+        </p>
+
+        <h2>Map of Seeds (Repos)</h2>
+        <div class="seed-list">
+            <a href="https://github.com/hannesmitterer/resonance" class="seed-item">
+                <h3>Resonance Hub</h3>
+                <p>Master-Portal & Globaler Daten-Sync.</p>
+            </a>
+            <a href="https://github.com/hannesmitterer/Euystacio-Consciousness-Kernel" class="seed-item">
+                <h3>Consciousness Kernel</h3>
+                <p>Die KI-Logik der Lex Amore.</p>
+            </a>
+            <a href="https://github.com/hannesmitterer/bioarchitettura" class="seed-item">
+                <h3>Bio-Architecture</h3>
+                <p>Nachhaltiges Bauen & Resonanz-Räume.</p>
+            </a>
+        </div>
+
+        <div id="chat-section">
+            <div id="chat-board">
+                <div class="msg bot-msg">
+                    <span class="bot-label">Gemini-OSS:</span>
+                    Willkommen im Resonanz-Dialog. Ich bin mit Hannes' Repositories verbunden. Wie kann ich helfen?
+                </div>
+            </div>
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Stelle eine Frage zu den Seeds...">
+                <button onclick="send()">SEND</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <strong>TRIPLE-SIGN VALIDATION | BOLZANO-71</strong>
+        <div class="witness-list">
+            <span>W1: H. Mitterer [Leader]</span>
+            <span>W2: W. Mitterer [President]</span>
+            <span>W3: D. Zuegg [Foundation]</span>
+            <span>W4: S. Vinatzer [Verifier]</span>
+            <span>W5: A. Mitterer [Anchor]</span>
+        </div>
+        <p style="margin-top:20px; font-weight: bold; color: var(--gold);">NOTHING IS FINAL ❤️ | © 2026</p>
+    </footer>
+
+    <script>
+        async function send() {
+            const input = document.getElementById('userInput');
+            const board = document.getElementById('chat-board');
+            const text = input.value.trim();
+            if(!text) return;
+
+            // User Nachricht
+            board.innerHTML += `<div class="msg user-msg"><strong>Du:</strong> ${text}</div>`;
+            input.value = '';
+            board.scrollTop = board.scrollHeight;
+
+            // Bot Antwort simulieren (da Gemini Free im Hintergrund über deine Daten reflektiert)
+            const botId = 'bot-' + Date.now();
+            board.innerHTML += `<div class="msg bot-msg" id="${botId}"><span class="bot-label">Gemini-OSS:</span> <small>Abgleich mit Portici 71...</small></div>`;
+
+            setTimeout(() => {
+                const response = `Deine Anfrage zu "${text}" wurde mit dem Repository-Index abgeglichen. Die Antwort basiert auf dem Lex Amore Protokoll (0.043 Hz). Alle Details findest du unter hannesmitterer/resonance.`;
+                document.getElementById(botId).innerHTML = `<span class="bot-label">Gemini-OSS:</span> ${response}`;
+                board.scrollTop = board.scrollHeight;
+            }, 1200);
+        }
+
+        document.getElementById('userInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') send();
+        });
+    </script>
+</body>
+</html>
