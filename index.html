@@ -2,6 +2,102 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resonance School | Live Portal</title>
+    <style>
+        :root { --gold: #b8860b; --bg: #ffffff; --text: #1a1a1a; }
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
+        header { border-bottom: 3px solid var(--gold); padding-bottom: 20px; margin-bottom: 30px; }
+        .container { max-width: 600px; margin: auto; text-align: left; }
+        
+        /* Chat-Board Design */
+        #chat-board { height: 350px; border: 2px solid var(--gold); border-radius: 10px; overflow-y: auto; padding: 15px; background: #fafafa; margin-bottom: 10px; }
+        .msg { margin-bottom: 15px; padding: 10px; border-radius: 8px; font-size: 0.95rem; line-height: 1.4; }
+        .bot { background: #fff; border: 1px solid #ddd; border-left: 4px solid var(--gold); }
+        .user { background: #eee; text-align: right; margin-left: 20%; }
+        
+        .input-area { display: flex; gap: 5px; }
+        input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+        button { background: var(--gold); color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        
+        footer { margin-top: 40px; font-size: 0.8rem; color: #888; text-align: center; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>WOODBORNE FESTIVAL</h1>
+    <p><strong>Live-Resonanz aktiv:</strong> 0.043 Hz | Portici 71</p>
+</header>
+
+<div class="container">
+    <div id="chat-board">
+        <div class="msg bot"><strong>Gemini-OSS:</strong> System bereit. Ich greife live auf hannesmitterer/resonance zu. Frag mich etwas über die Seeds.</div>
+    </div>
+    
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Deine Frage an die Resonanz...">
+        <button onclick="askLive()">SEND</button>
+    </div>
+</div>
+
+<footer>
+    <p>TRIPLE-SIGN VALIDATION | NOTHING IS FINAL ❤️</p>
+</footer>
+
+<script>
+    // Diese Funktion holt ECHTE Daten von GitHub
+    async function fetchRepoData() {
+        try {
+            // Wir holen die README deines Master-Repos als Wissensbasis
+            const response = await fetch('https://api.github.com/repos/hannesmitterer/resonance/readme');
+            const data = await response.json();
+            // Dekodierung des Inhalts (GitHub sendet in Base64)
+            return atob(data.content);
+        } catch (e) {
+            return "Fehler beim Live-Zugriff auf die Repositories.";
+        }
+    }
+
+    async function askLive() {
+        const input = document.getElementById('userInput');
+        const board = document.getElementById('chat-board');
+        const query = input.value.trim();
+        if(!query) return;
+
+        // User Nachricht anzeigen
+        board.innerHTML += `<div class="msg user"><strong>Du:</strong> ${query}</div>`;
+        input.value = '';
+        board.scrollTop = board.scrollHeight;
+
+        // "Lade"-Nachricht
+        const tempId = 'loading-' + Date.now();
+        board.innerHTML += `<div class="msg bot" id="${tempId}"><em>Suche in hannesmitterer/resonance...</em></div>`;
+
+        // ECHTE DATEN HOLEN
+        const repoContent = await fetchRepoData();
+
+        // Gemini-Logik (hier simuliert durch Live-Daten-Verarbeitung)
+        setTimeout(() => {
+            let answer = "";
+            if (repoContent.toLowerCase().includes(query.toLowerCase())) {
+                answer = "Ich habe eine Übereinstimmung in deinen Seeds gefunden! Basierend auf dem Live-Inhalt von hannesmitterer/resonance: " + repoContent.substring(0, 200) + "...";
+            } else {
+                answer = "Deine Frage wurde mit dem Live-Index abgeglichen. Das System (0.043 Hz) bestätigt: Die Information wird im Sinne der Lex Amore verarbeitet. Schau direkt im Repo nach Updates.";
+            }
+            
+            document.getElementById(tempId).innerHTML = `<strong>Gemini-OSS:</strong> ${answer}`;
+            board.scrollTop = board.scrollHeight;
+        }, 1000);
+    }
+</script>
+
+</body>
+</html> </p> 
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Resonance School | E-Framework Bolzano</title>
     <style>
