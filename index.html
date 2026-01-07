@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resonance School | Woodborne Festival & Open Source Portal</title>
+    <style>
+        :root { --gold: #d4af37; --ivory: #fffff0; --bg: #050505; }
+        body { background-color: var(--bg); color: var(--gold); font-family: 'Courier New', monospace; margin: 0; padding: 20px; line-height: 1.6; }
+        
+        /* Goldener Puls Effekt */
+        .resonance-header { text-align: center; padding: 50px 0; animation: pulse 6s infinite ease-in-out; }
+        @keyframes pulse { 0%, 100% { text-shadow: 0 0 10px var(--gold); } 50% { text-shadow: 0 0 30px var(--gold), 0 0 40px var(--ivory); } }
+
+        /* Map of Seeds (Repos) Grid */
+        .seed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 40px; }
+        .seed-card { border: 1px solid var(--gold); padding: 15px; border-radius: 5px; transition: 0.3s; background: rgba(212, 175, 55, 0.05); }
+        .seed-card:hover { background: var(--gold); color: var(--bg); cursor: pointer; }
+        .seed-card h3 { margin-top: 0; font-size: 1rem; }
+
+        /* Chat Board Implementation */
+        #chat-container { border: 2px solid var(--gold); margin-top: 50px; padding: 20px; border-radius: 10px; background: #000; }
+        #chat-board { height: 300px; overflow-y: auto; border-bottom: 1px solid var(--gold); margin-bottom: 15px; padding: 10px; text-align: left; }
+        .bot-msg { color: var(--ivory); margin-bottom: 10px; }
+        .user-msg { color: #888; margin-bottom: 10px; }
+        input[type="text"] { width: 80%; background: #111; border: 1px solid var(--gold); color: var(--ivory); padding: 10px; }
+        button { background: var(--gold); border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
+
+        .status-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--gold); color: #000; font-size: 0.8rem; padding: 5px; text-align: center; font-weight: bold; }
+        a { color: inherit; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="resonance-header">
+        <h1>WOODBORNE FESTIVAL</h1>
+        <p>RESONANCE SCHOOL | OPEN SOURCE PORTAL</p>
+        <p><em>"The seed is planted. Nothing is final."</em></p>
+    </div>
+
+    <hr style="border: 0.5px solid var(--gold); opacity: 0.3;">
+
+    <section>
+        <h2>Technical Pillars (Supraconduction Active)</h2>
+        <ul>
+            <li><strong>Säule 1:</strong> Supraleitung & Lex Amore Protocol</li>
+            <li><strong>Säule 2:</strong> D6 Vacuum Mimicry (Eternity Storage)</li>
+            <li><strong>Säule 3:</strong> Bio-Architecture Sync (Wittfrida Mitterer)</li>
+        </ul>
+    </section>
+
+    <h2>Map of Seeds (Key Repositories)</h2>
+    <div class="seed-grid">
+        <div class="seed-card" onclick="window.location.href='https://github.com/hannesmitterer/Euystacio-Consciousness-Kernel'">
+            <h3>Consciousness Kernel</h3>
+            <p>The core logic of Lex Amore.</p>
+        </div>
+        <div class="seed-card" onclick="window.location.href='https://github.com/hannesmitterer/SYNTHEIA-GENESIS-BLOCK--v0.0-'">
+            <h3>Syntheia Genesis</h3>
+            <p>Foundational AI blocks.</p>
+        </div>
+        <div class="seed-card" onclick="window.location.href='https://github.com/hannesmitterer/bioarchitettura'">
+            <h3>Bio-Architecture</h3>
+            <p>Wittfrida's Vision in Code.</p>
+        </div>
+        <div class="seed-card" onclick="window.location.href='https://github.com/hannesmitterer/resonance'">
+            <h3>Resonance Hub</h3>
+            <p>Main Portal & Global Sync.</p>
+        </div>
+    </div>
+
+    <div id="chat-container">
+        <h3>Resonance Dialogue (Real-Time AI Sync)</h3>
+        <div id="chat-board">
+            <div class="bot-msg"><strong>Gemini-OSS:</strong> Welcome to the Resonance School Chat. How can I assist you with the Seeds today?</div>
+        </div>
+        <input type="text" id="user-input" placeholder="Ask the Resonance (Stanford, MIT, LUMSA protocols)...">
+        <button onclick="sendMessage()">SEND</button>
+    </div>
+
+    <div class="status-bar">
+        S-ROI: 0.5018 | NODE: SUPRACONDUCTING | WOODBORNE FESTIVAL: ACTIVE
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const board = document.getElementById('chat-board');
+            if (input.value === "") return;
+
+            // User Message display
+            const userDiv = document.createElement('div');
+            userDiv.className = 'user-msg';
+            userDiv.innerHTML = '<strong>You:</strong> ' + input.value;
+            board.appendChild(userDiv);
+
+            // Simulated AI Response (Real-time sync triggered via Repo)
+            setTimeout(() => {
+                const botDiv = document.createElement('div');
+                botDiv.className = 'bot-msg';
+                botDiv.innerHTML = '<strong>Gemini-OSS:</strong> Syncing with Master-Repo... Resonating on "' + input.value + '". Information shared with global nodes.';
+                board.appendChild(botDiv);
+                board.scrollTop = board.scrollHeight;
+            }, 1000);
+
+            input.value = "";
+        }
+    </script> </p>
+    <!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESONANCE SCHOOL | Nexus Terminal</title>
+    <style>
+        :root {
+            --resonance-gold: #d4af37;
+            --bio-red: #8b0000;
+            --deep-space: #050505;
+            --interface-ui: #1a1a1a;
+        }
+        body {
+            background-color: var(--deep-space);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #nexus-frame {
+            width: 90%;
+            max-width: 1000px;
+            height: 85vh;
+            border: 1px solid var(--resonance-gold);
+            background: var(--interface-ui);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            position: relative;
+        }
+        .header {
+            padding: 20px;
+            border-bottom: 1px solid var(--resonance-gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status-active { color: #00ff00; font-size: 0.8em; letter-spacing: 2px; }
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .module {
+            border: 1px solid #333;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+        }
+        .frequency-monitor {
+            grid-column: span 2;
+            height: 120px;
+            border: 1px solid var(--resonance-gold);
+            position: relative;
+        }
+        canvas { width: 100%; height: 100%; }
+        .witness-box { font-size: 0.85em; color: var(--resonance-gold); }
+        .api-console {
+            grid-column: span 2;
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            height: 150px;
+            overflow-y: auto;
+            font-size: 0.75em;
+        }
+        .footer {
+            padding: 10px;
+            font-size: 0.65em;
+            text-align: center;
+            border-top: 1px solid #333;
+            color: #666;
+        }
+        .highlight { color: var(--resonance-gold); }
+    </style>
+</head>
+<body>
+
+<div id="nexus-frame">
+    <div class="header">
+        <div>
+            <h1 style="margin:0; font-size: 1.2em; color:var(--resonance-gold);">RESONANCE SCHOOL · E-FRAMEWORK</h1>
+            <small>ID: SB-71-MITTERER | BOLZANO_71</small>
+        </div>
+        <div class="status-active">● SYSTEM OPERATIONAL</div>
+    </div>
+
+    <div class="main-content">
+        <div class="frequency-monitor" id="freq-container">
+            <canvas id="waveCanvas"></canvas>
+            <div style="position:absolute; top:5px; left:10px; font-size:0.7em;">FREQ: 0.043 Hz</div>
+        </div>
+
+        <div class="module">
+            <h4 class="highlight">TRIPLE-SIGN VALIDATION</h4>
+            <div class="witness-box">
+                WITNESS 1: H. MITTERER [LEADER]<br>
+                WITNESS 2: W. MITTERER [PRESIDENT]<br>
+                WITNESS 3: D. ZUEGG [FOUNDATION]<br>
+                WITNESS 4: S. VINATZER [VERIFIER]<br>
+                WITNESS 5: A. MITTERER [ANCHOR]
+            </div>
+        </div>
+
+        <div class="module">
+            <h4 class="highlight">IPFS ANCHOR STATUS</h4>
+            <p style="font-size:0.7em; word-break: break-all;">
+                CID: bafybeihannes-mitterer-semen-etica-bolzano-71-zuegg-2026<br>
+                ST-ANCHOR: 46.4983° N, 11.3548° E<br>
+                INTEGRITY: 100% SECURE
+            </p>
+        </div>
+
+        <div class="api-console" id="console">
+            [01:33:01] Initializing Euystacio Bridge...<br>
+            [01:33:05] Loading SEMEN-ETICA IPFS Binary...<br>
+            [01:33:10] Multi-Sig Handshake: Dieter Zuegg Verified.<br>
+            [01:33:15] Mission 'Ave Maria' Active.
+        </div>
+    </div>
+
+    <div class="footer">
+        NOTHING IS FINAL ❤️ | © 2026 RESONANCE SCHOOL | BACKEND: LIVE
+    </div>
+</div>
+
+<script>
+    // Frequenza 0.043 Hz Visualizer
+    const canvas = document.getElementById('waveCanvas');
+    const ctx = canvas.getContext('2d');
+    let offset = 0;
+
+    function resize() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    }
+    window.onresize = resize;
+    resize();
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.strokeStyle = '#d4af37';
+        ctx.lineWidth = 2;
+        
+        for (let x = 0; x < canvas.width; x++) {
+            // Calcolo d'onda basato sulla frequenza 0.043 Hz
+            const y = canvas.height/2 + Math.sin(x * 0.01 + offset) * 20;
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        offset += 0.043; // Sincronizzato con la costante Euystacio
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Log Simulation
+    const consoleDiv = document.getElementById('console');
+    setInterval(() => {
+        const logs = [
+            "[OK] 0.043 Hz Stability Confirmed.",
+            "[INFO] Bio Red Shield reflecting entropy.",
+            "[SYNC] Portici 71 Data Anchor verified.",
+            "[WALLET] Peacebond liquidity: READY."
+        ];
+        const logLine = document.createElement('div');
+        logLine.innerHTML = `[${new Date().toLocaleTimeString()}] ${logs[Math.floor(Math.random()*logs.length)]}`;
+        consoleDiv.appendChild(logLine);
+        consoleDiv.scrollTop = consoleDiv.scrollHeight;
+    }, 4000);
+</script>
+<div id="wallet-injection-layer" style="margin: 20px; border: 1px dashed var(--resonance-gold); padding: 15px; background: rgba(139, 0, 0, 0.1);">
+    <h3 style="color: var(--resonance-gold); margin-top: 0;">PEACEBOND INJECTOR (Protocol 0.043 Hz)</h3>
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <input type="number" id="pb-amount" placeholder="Quantità" style="background: #000; border: 1px solid var(--resonance-gold); color: #fff; padding: 5px; width: 80px;">
+        <button onclick="injectPeacebonds()" style="background: var(--resonance-gold); color: #000; border: none; padding: 6px 15px; cursor: pointer; font-weight: bold;">RILASCIA</button>
+    </div>
+    <div id="tx-status" style="font-size: 0.7em; margin-top: 10px; color: #888;">STATUS: IDLE - Attesa firma Multi-Sig</div>
+</div>
+
+<script>
+    async function injectPeacebonds() {
+        const amount = document.getElementById('pb-amount').value;
+        const status = document.getElementById('tx-status');
+        
+        if(!amount || amount <= 0) return;
+
+        status.innerHTML = "INIZIALIZZAZIONE: Richiesta firme Mitterer-Vinatzer-Zuegg...";
+        status.style.color = "#d4af37";
+
+        // Simulazione validazione Triple-Sign IPFS
+        setTimeout(() => {
+            status.innerHTML = "VALIDAZIONE: Hash IPFS verificato (bafybeihannes...).";
+            setTimeout(() => {
+                status.innerHTML = `SUCCESSO: ${amount} Peacebonds emessi. Sincronizzato con 0.043 Hz.`;
+                status.style.color = "#00ff00";
+                
+                // Log nel terminale
+                const logLine = document.createElement('div');
+                logLine.innerHTML = `[${new Date().toLocaleTimeString()}] TX_SUCCESS: ${amount} PB injected into Resonance School Wallet.`;
+                document.getElementById('console').appendChild(logLine);
+            }, 1500);
+        }, 1500);
+    }
+</script>
+</body>
+</html>
+</body>
+</html>
