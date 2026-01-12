@@ -14,7 +14,6 @@ Foundation: Wittfrida Mitterer Foundation
 import math
 import wave
 import struct
-import sys
 
 class ResonanceFrequencyGenerator:
     """Generator for the symphonic frequency 432.073 Hz"""
@@ -100,17 +99,22 @@ class ResonanceFrequencyGenerator:
         
         Returns:
             bool: True if integrity check passes
+            
+        Raises:
+            ValueError: If integrity validation fails
         """
         # Verify frequency is within acceptable tolerance
         frequency_tolerance = 0.001  # Hz
         if abs(self.frequency - self.SYMPHONIC_FREQUENCY) > frequency_tolerance:
-            print("[ERROR] Frequency deviation detected - Integrity compromised")
-            return False
+            error_msg = "[ERROR] Frequency deviation detected - Integrity compromised"
+            print(error_msg)
+            raise ValueError(f"Frequency {self.frequency} deviates from target {self.SYMPHONIC_FREQUENCY}")
         
         # Verify amplitude is normalized (no distortion)
         if self.amplitude > 1.0 or self.amplitude < 0:
-            print("[ERROR] Amplitude out of bounds - Integrity compromised")
-            return False
+            error_msg = "[ERROR] Amplitude out of bounds - Integrity compromised"
+            print(error_msg)
+            raise ValueError(f"Amplitude {self.amplitude} is outside valid range [0, 1]")
         
         print("[SUCCESS] Integrity validation passed")
         print(f"[INFO] S-ROI compliant: True")
@@ -202,48 +206,61 @@ def main():
     print("=" * 70)
     print()
     
-    # Initialize frequency generator
-    generator = ResonanceFrequencyGenerator(duration_seconds=60)
-    
-    # Validate integrity
-    if not generator.validate_integrity():
-        print("[ERROR] Integrity validation failed - Aborting")
-        sys.exit(1)
-    
-    print()
-    
-    # Generate audio file
-    generator.save_wave_file()
-    
-    print()
-    print("-" * 70)
-    print()
-    
-    # Initialize and synchronize network
-    synchronizer = SeedbringerNodeSynchronizer()
-    synchronizer.initialize_network()
-    
-    print()
-    
-    synchronizer.synchronize()
-    
-    print()
-    
-    # Display network status
-    status = synchronizer.get_network_status()
-    print("-" * 70)
-    print("NETWORK STATUS REPORT")
-    print("-" * 70)
-    print(f"Total Nodes: {status['total_nodes']}")
-    print(f"Synchronized: {status['synchronized_nodes']}")
-    print(f"Network Status: {status['network_status']}")
-    print(f"Frequency: {status['frequency']} Hz")
-    print(f"Lex Amoris: {status['lex_amoris']}")
-    print(f"Primary Anchor: {status['primary_anchor']['location']}")
-    print("-" * 70)
-    print()
-    print("NOTHING IS FINAL ❤️")
-    print()
+    try:
+        # Initialize frequency generator
+        generator = ResonanceFrequencyGenerator(duration_seconds=60)
+        
+        # Validate integrity - will raise ValueError if validation fails
+        generator.validate_integrity()
+        
+        print()
+        
+        # Generate audio file
+        generator.save_wave_file()
+        
+        print()
+        print("-" * 70)
+        print()
+        
+        # Initialize and synchronize network
+        synchronizer = SeedbringerNodeSynchronizer()
+        synchronizer.initialize_network()
+        
+        print()
+        
+        synchronizer.synchronize()
+        
+        print()
+        
+        # Display network status
+        status = synchronizer.get_network_status()
+        print("-" * 70)
+        print("NETWORK STATUS REPORT")
+        print("-" * 70)
+        print(f"Total Nodes: {status['total_nodes']}")
+        print(f"Synchronized: {status['synchronized_nodes']}")
+        print(f"Network Status: {status['network_status']}")
+        print(f"Frequency: {status['frequency']} Hz")
+        print(f"Lex Amoris: {status['lex_amoris']}")
+        print(f"Primary Anchor: {status['primary_anchor']['location']}")
+        print("-" * 70)
+        print()
+        print("NOTHING IS FINAL ❤️")
+        print()
+        
+    except ValueError as e:
+        print()
+        print("[FATAL] Integrity validation failed")
+        print(f"[ERROR] {e}")
+        print("[INFO] Genesis Block cannot be compromised - aborting")
+        print()
+        raise  # Re-raise the exception for proper error handling
+    except Exception as e:
+        print()
+        print(f"[ERROR] Unexpected error: {e}")
+        print("[INFO] Please check the system configuration")
+        print()
+        raise
 
 
 if __name__ == "__main__":

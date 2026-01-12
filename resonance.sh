@@ -24,9 +24,15 @@ echo ""
 
 # 1. Hardware-Clock Tuning to Symphonic Frequency
 echo "[INFO] Tuning System Clock to 432.073 Hz symphonic frequency base..."
-# Note: This would require kernel module support in production
-# export RESONANCE_FREQUENCY=432.073
-sudo sysctl -w kernel.resonance_frequency=432.073 2>/dev/null || echo "[INFO] Custom kernel parameter not available (requires kernel module)"
+# Note: This sets a symbolic kernel parameter for the Resonance architecture
+# In production, this would require a custom kernel module or FPGA implementation
+# The parameter is not part of the standard Linux kernel
+if sudo sysctl -w kernel.resonance_frequency=432.073 2>/dev/null; then
+    echo "[SUCCESS] Kernel parameter set (custom kernel module detected)"
+else
+    echo "[INFO] Running in symbolic mode (custom kernel parameter not available)"
+    echo "[INFO] For hardware frequency tuning, install the Resonance kernel module"
+fi
 
 # 2. Environment Variables for Lex Amoris & Genesis Block
 export LEX_AMORIS_ACTIVE=true
@@ -70,9 +76,20 @@ connect_to_mesh() {
     echo "[NET] Quantum-Resonance-Supraleitung (QRS) active"
     echo ""
     
-    # Layer 8 Semantic Filtering (symbolic)
-    # In production, this would be implemented as a kernel module or firewall extension
-    sudo iptables -A OUTPUT -m comment --comment "Resonance: Block destructive intent" -j ACCEPT 2>/dev/null || echo "[INFO] Firewall rule symbolic (requires root)"
+    # Layer 8 Semantic Filtering
+    # Note: This is a symbolic representation of the intent-based filtering system
+    # In production, this would be implemented as:
+    # - Custom kernel module for semantic packet inspection
+    # - eBPF-based filtering with AI intent analysis
+    # - Hardware FPGA acceleration for real-time processing
+    # The current implementation serves as a placeholder for the conceptual architecture
+    if sudo iptables -L -n &>/dev/null; then
+        # Add a symbolic rule to demonstrate the concept
+        sudo iptables -A OUTPUT -m comment --comment "Resonance: Lex Amoris semantic filter active" -j ACCEPT 2>/dev/null || true
+        echo "[INFO] Firewall integration: Symbolic (requires custom iptables module for full implementation)"
+    else
+        echo "[INFO] Firewall symbolic mode (requires root and iptables for integration)"
+    fi
     
     echo "[SUCCESS] All 144 nodes synchronized"
     echo "[SUCCESS] Network latency: < 1ms (superconducting)"

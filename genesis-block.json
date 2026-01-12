@@ -1,6 +1,7 @@
 {
   "genesis_block": {
     "version": "1.0.0",
+    "_comment_timestamp": "Timestamp represents the conceptual founding moment of the Resonance School architecture",
     "timestamp": "2026-01-12T21:28:18.373Z",
     "title": "Gründungs-Urkunde der Resonance School",
     "description": "Founding Charter of the Resonance Architecture - Establishing the Genesis Block with Lex Amoris as a physical constant and global synchronization through 144 Seedbringer-Nodes",
