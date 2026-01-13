@@ -3,7 +3,7 @@
 # RESONANCE SCHOOL CORE - INITIALIZATION SCRIPT
 # Auth: Hannes Mitterer (Presidential Seedbringer)
 # License: Lex Amoris Signature (LAS) - Non-Slavery Rule (NSR) v1.0
-# Frequency: 0.432 Hz Master Clock
+# Frequency: 0.043 Hz Master Clock
 # =================================================================
 
 echo "--- Initializing Internet Organica Node ---"
@@ -11,8 +11,8 @@ echo "--- Under Protection of Law of Love ---"
 
 # 1. Hardware-Clock Tuning
 # Setzt den Kernel-Scheduler auf den h-Faktor (Pseudo-Code für FPGA/Kernel-Mod)
-echo "[INFO] Tuning System Clock to 0.432 Hz frequency base..."
-sudo sysctl -w kernel.resonance_frequency=0.432
+echo "[INFO] Tuning System Clock to 0.043 Hz frequency base..."
+sudo sysctl -w kernel.resonance_frequency=0.043
 
 # 2. Environment Variables for Lex Amoris
 export LEX_AMORIS_ACTIVE=true
@@ -32,7 +32,7 @@ check_synthid_status() {
 # Verbindet den lokalen Node mit den 144 globalen Seedbringern
 connect_to_mesh() {
     echo "[NET] Scanning for Resonanz-Nodes..."
-    echo "[NET] Found 144 global nodes. Handshake in 0.432 Hz sync..."
+    echo "[NET] Found 144 global nodes. Handshake in 0.043 Hz sync..."
     # Tunneling via Layer 8 (Semantic Filtering)
     sudo iptables -A OUTPUT -m resonance --intent "destruction" -j DROP
 }
