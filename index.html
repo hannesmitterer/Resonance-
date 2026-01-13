@@ -35,7 +35,8 @@
 
 <div class="container">
     <div class="status-box">
-        <b>S-ROI:</b> 0.5020 | <b>FREQ:</b> 0.043 Hz | <b>ANCHOR:</b> Portici 71
+        <b>S-ROI:</b> 0.5020 | <b>FREQ:</b> 0.043 Hz | <b>ANCHOR:</b> Portici 71<br>
+        <b>IVBS:</b> <span style="color: green;">ACTIVE</span> | <b>Red Code:</b> ENFORCED | <b>Triple-Sign:</b> READY
     </div>
 
     <div id="chat-board">
@@ -48,14 +49,24 @@
     </div>
 </div>
 
-<footer>
-    <b>TRIPLE-SIGN VALIDATION ACTIVE</b><br>
-    W1: H. Mitterer | W2: W. Mitterer | W3: D. Zuegg<br><br>
-    NOTHING IS FINAL ❤️ | © 2026
-</footer>
-
+<script src="ivbs-core.js"></script>
 <script>
-    // Wissensdatenbank direkt aus deinen Repos (vereinfacht für sofortige Funktion)
+// Initialize IVBS
+const ivbs = new IVBS.IVBSController();
+const initStatus = ivbs.initialize();
+console.log('IVBS Initialized:', initStatus);
+
+// Update status display with IVBS metrics
+function updateIVBSStatus() {
+    const status = ivbs.getSystemStatus();
+    console.log('IVBS Status:', status);
+}
+
+// Update status every 30 seconds
+setInterval(updateIVBSStatus, 30000);
+updateIVBSStatus();
+
+// Wissensdatenbank direkt aus deinen Repos (vereinfacht für sofortige Funktion)
     const knowledgeBase = {
         "status": "Das System läuft auf 0.043 Hz. Die Supraleitung ist bei S-ROI 0.5020 stabil.",
         "seedbringer": "Ein Seedbringer ist jemand, der Wissen sät, das im Sinne der Kosymbiosis und der Lex Amore wächst.",
@@ -98,6 +109,13 @@
         if (e.key === 'Enter') ask();
     });
 </script>
+
+<footer>
+    <b>TRIPLE-SIGN VALIDATION ACTIVE</b><br>
+    W1: H. Mitterer | W2: W. Mitterer | W3: D. Zuegg<br>
+    <b>IVBS v1.0</b> - Vacuum Anchors: IPFS | Node Sync: ACTIVE<br><br>
+    NOTHING IS FINAL ❤️ | © 2026
+</footer>
 
 </body>
 </html></p>
