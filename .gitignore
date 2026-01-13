@@ -13,7 +13,6 @@ build/
 
 # Docker
 *.tar
-.dockerignore
 
 # IDE
 .vscode/

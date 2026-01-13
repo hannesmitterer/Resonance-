@@ -30,7 +30,7 @@ All partner projects adhere to the Lex Amore protocol, ensuring:
 
 ### 2. Technical Standards
 - **Resonance Frequency**: 0.043 Hz bio-resonance coupling
-- **S-ROI Threshold**: Minimum 0.5020 for system stability
+- **S-ROI Threshold**: 0.5192 for system integrity
 - **Triple-Sign Validation**: Multi-witness authentication
 
 ### 3. Documentation Synchronization

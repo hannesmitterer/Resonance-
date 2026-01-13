@@ -1,0 +1,36 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+
+# Documentation (except what we explicitly copy)
+*.md
+!README.md
+!README_PARTNERS.md
+
+# Old versions
+indexold*
+
+# Temp files
+*.tmp
+*.bak
+tmp/
+temp/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Node modules
+node_modules/
+
+# Environment
+.env*
