@@ -1,0 +1,21 @@
+services:
+  resonance-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: resonance-school
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    labels:
+      - "com.resonance.description=Resonance School Woodborne Festival Portal"
+      - "com.resonance.version=1.0.0"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
