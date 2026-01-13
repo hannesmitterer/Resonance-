@@ -23,7 +23,7 @@ export SYNTH_ID_KEY="ID_RES_MITTERER_2026_011"
 # 2.1 Sustainability Locks
 export SUSTAINABILITY_LOCK_ENABLED=true
 export FREQUENCY_LOCK_HZ=0.432
-export ECOLOGICAL_MODE=ACTIVE
+export ECOLOGICAL_MODE="ACTIVE"
 export GOVERNANCE_SYNC_ENABLED=true
 
 # 3. SynthID Integrity Check
@@ -62,6 +62,7 @@ integrate_biometric_nodes() {
     # Simulate biometric node discovery
     echo "[SCAN] Scanning for biometric authentication nodes..."
     local bio_nodes=("NODE_BIO_001" "NODE_BIO_002" "NODE_BIO_003")
+    local current_timestamp=$(date +%s)
     
     for node in "${bio_nodes[@]}"; do
         echo "[DETECTED] Biometric node: $node"
