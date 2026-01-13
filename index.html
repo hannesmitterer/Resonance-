@@ -314,13 +314,23 @@
         // Fetch repository data for Gemini reflection
         async function fetchRepositoryData(repo) {
             try {
-                const [readme, commits] = await Promise.all([
-                    fetch(`https://api.github.com/repos/${repo}/readme`).then(r => r.json()),
-                    fetch(`https://api.github.com/repos/${repo}/commits?per_page=5`).then(r => r.json())
-                ]);
+                const readmeResponse = await fetch(`https://api.github.com/repos/${repo}/readme`);
+                const commitsResponse = await fetch(`https://api.github.com/repos/${repo}/commits?per_page=5`);
+                
+                const readme = readmeResponse.ok ? await readmeResponse.json() : null;
+                const commits = commitsResponse.ok ? await commitsResponse.json() : [];
+                
+                let readmeContent = '';
+                if (readme && readme.content) {
+                    try {
+                        readmeContent = atob(readme.content);
+                    } catch (e) {
+                        console.error('Error decoding readme:', e);
+                    }
+                }
                 
                 return {
-                    readme: readme.content ? atob(readme.content) : '',
+                    readme: readmeContent,
                     commits: commits,
                     repo: repo
                 };
@@ -336,6 +346,7 @@
             for (const repo of repositories) {
                 try {
                     const response = await fetch(`https://api.github.com/search/code?q=${encodeURIComponent(query)}+repo:${repo}`);
+                    if (!response.ok) continue;
                     const data = await response.json();
                     if (data.items && data.items.length > 0) {
                         results.push({repo, matches: data.items.slice(0, 3)});
