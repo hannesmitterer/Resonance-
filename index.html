@@ -323,7 +323,8 @@
                 let readmeContent = '';
                 if (readme && readme.content) {
                     try {
-                        readmeContent = atob(readme.content);
+                        // Remove whitespace/newlines from base64 before decoding
+                        readmeContent = atob(readme.content.replace(/\s/g, ''));
                     } catch (e) {
                         console.error('Error decoding readme:', e);
                     }
