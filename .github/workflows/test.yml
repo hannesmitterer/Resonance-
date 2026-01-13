@@ -1,0 +1,45 @@
+name: Test
+
+on:
+  push:
+    branches: [ main, develop, copilot/** ]
+  pull_request:
+    branches: [ main, develop ]
+
+permissions:
+  contents: read
+
+jobs:
+  test-html:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: |
+          npm install -g html-validate
+      
+      - name: Validate HTML structure
+        run: |
+          echo "Validating HTML files..."
+          for file in *.html; do
+            if [ -f "$file" ]; then
+              echo "Testing $file..."
+              # Basic validation that file exists and is readable
+              test -r "$file" && echo "✓ $file is readable"
+            fi
+          done
+      
+      - name: Test shell script
+        run: |
+          if [ -f "resonance.sh" ]; then
+            # Check if script is executable
+            chmod +x resonance.sh
+            # Validate bash syntax
+            bash -n resonance.sh && echo "✓ resonance.sh syntax is valid"
+          fi

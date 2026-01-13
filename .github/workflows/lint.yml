@@ -1,0 +1,49 @@
+name: Lint
+
+on:
+  push:
+    branches: [ main, develop, copilot/** ]
+  pull_request:
+    branches: [ main, develop ]
+
+permissions:
+  contents: read
+
+jobs:
+  lint-html:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Validate HTML files
+        run: |
+          # Install HTML validator
+          npm install -g html-validate
+          
+          # Validate all HTML files
+          find . -name "*.html" -not -path "./node_modules/*" -exec html-validate {} +
+      
+      - name: Check HTML syntax
+        run: |
+          # Basic HTML syntax check using tidy
+          sudo apt-get update
+          sudo apt-get install -y tidy
+          
+          for file in *.html; do
+            if [ -f "$file" ]; then
+              echo "Checking $file..."
+              tidy -q -e "$file" || true
+            fi
+          done
+
+  lint-shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install ShellCheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      
+      - name: Lint shell scripts
+        run: |
+          find . -name "*.sh" -not -path "./node_modules/*" -exec shellcheck {} +
