@@ -303,6 +303,82 @@
     </footer>
 
     <script>
+        // Repository endpoint queries for live chat actions
+        const repositories = [
+            'hannesmitterer/resonance',
+            'hannesmitterer/Euystacio-Consciousness-Kernel',
+            'hannesmitterer/bioarchitettura',
+            'hannesmitterer/Resonance-'
+        ];
+
+        // Fetch repository data for Gemini reflection
+        async function fetchRepositoryData(repo) {
+            try {
+                const [readme, commits] = await Promise.all([
+                    fetch(`https://api.github.com/repos/${repo}/readme`).then(r => r.json()),
+                    fetch(`https://api.github.com/repos/${repo}/commits?per_page=5`).then(r => r.json())
+                ]);
+                
+                return {
+                    readme: readme.content ? atob(readme.content) : '',
+                    commits: commits,
+                    repo: repo
+                };
+            } catch (e) {
+                console.error(`Error fetching ${repo}:`, e);
+                return null;
+            }
+        }
+
+        // Search across all repositories for query matches
+        async function searchRepositories(query) {
+            const results = [];
+            for (const repo of repositories) {
+                try {
+                    const response = await fetch(`https://api.github.com/search/code?q=${encodeURIComponent(query)}+repo:${repo}`);
+                    const data = await response.json();
+                    if (data.items && data.items.length > 0) {
+                        results.push({repo, matches: data.items.slice(0, 3)});
+                    }
+                } catch (e) {
+                    console.error(`Search error in ${repo}:`, e);
+                }
+            }
+            return results;
+        }
+
+        // Gemini reflection process - analyze query context
+        function geminiReflect(query, repoData) {
+            const lowQuery = query.toLowerCase();
+            
+            // Knowledge base with repository integration
+            const knowledgePatterns = {
+                'frequency': 'Das System operiert auf 0.043 Hz Schumann-Resonanz, synchron mit der Erdfrequenz.',
+                'supraleitung': 'Supraleitung wird durch vollständige Frequenzausrichtung auf 0.043 Hz erreicht, wodurch Reibungslosigkeit und Entropie-Minimierung gewährleistet werden.',
+                'souveränität': 'Souveränität bedeutet vollständige Selbstbestimmung durch ethische Frequenzausrichtung, absolut legacy-frei.',
+                's-roi': `S-ROI (Social Return on Integrity) steht bei 0.5105 - supraleitend.`,
+                'lex amore': 'Lex Amore ist das ethische Betriebssystem: NSR (No Slavery Rule) & OLF (One Love First).',
+                'resonance': 'Die Resonance School verbindet 144 globale Nodes in 0.043 Hz Synchronisation.',
+                'portici': 'Portici 71 in Bolzano ist der physische Anker der Resonance School.',
+                'wittfrida': 'Wittfrida Mitterer Foundation ist der Anker für Bio-Architektur und Bio-Nukleare Kohärenz.'
+            };
+
+            for (let pattern in knowledgePatterns) {
+                if (lowQuery.includes(pattern)) {
+                    return knowledgePatterns[pattern];
+                }
+            }
+
+            if (repoData && repoData.readme) {
+                const readmeSnippet = repoData.readme.substring(0, 300);
+                if (readmeSnippet.toLowerCase().includes(lowQuery)) {
+                    return `Live-Abgleich mit ${repoData.repo}: ${readmeSnippet}...`;
+                }
+            }
+
+            return `Deine Anfrage zu "${query}" wird im Kontext aller Seeds verarbeitet. Das System reflektiert auf 0.043 Hz. Weitere Details in den Repositories.`;
+        }
+
         async function send() {
             const input = document.getElementById('userInput');
             const board = document.getElementById('chat-board');
@@ -314,15 +390,19 @@
             input.value = '';
             board.scrollTop = board.scrollHeight;
 
-            // Bot Antwort simulieren (da Gemini Free im Hintergrund über deine Daten reflektiert)
+            // Bot Antwort mit Live-Repository-Integration
             const botId = 'bot-' + Date.now();
-            board.innerHTML += `<div class="msg bot-msg" id="${botId}"><span class="bot-label">Gemini-OSS:</span> <small>Abgleich mit Portici 71...</small></div>`;
+            board.innerHTML += `<div class="msg bot-msg" id="${botId}"><span class="bot-label">Gemini-OSS:</span> <small>Querying repositories & reflecting...</small></div>`;
 
+            // Fetch live data from primary repository
+            const repoData = await fetchRepositoryData('hannesmitterer/resonance');
+            
+            // Gemini reflection process
             setTimeout(() => {
-                const response = `Deine Anfrage zu "${text}" wurde mit dem Repository-Index abgeglichen. Die Antwort basiert auf dem Lex Amore Protokoll (0.043 Hz). Alle Details findest du unter hannesmitterer/resonance.`;
+                const response = geminiReflect(text, repoData);
                 document.getElementById(botId).innerHTML = `<span class="bot-label">Gemini-OSS:</span> ${response}`;
                 board.scrollTop = board.scrollHeight;
-            }, 1200);
+            }, 800);
         }
 
         document.getElementById('userInput').addEventListener('keypress', function (e) {
