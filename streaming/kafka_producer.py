@@ -6,7 +6,7 @@ Sends data streams to other nodes (LexAmoris, Nexus)
 import json
 import logging
 from typing import Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 try:
     from kafka import KafkaProducer
@@ -69,7 +69,7 @@ class ResonanceProducer:
         """
         message = {
             'type': MESSAGE_TYPES['STATE_UPDATE'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'anchor': RESONANCE_CONFIG['anchor'],
             'data': state_data,
         }
@@ -88,7 +88,7 @@ class ResonanceProducer:
         """
         message = {
             'type': MESSAGE_TYPES['FREQUENCY_SYNC'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'frequency': frequency,
             's_roi': s_roi,
             'anchor': RESONANCE_CONFIG['anchor'],
@@ -109,7 +109,7 @@ class ResonanceProducer:
         """
         message = {
             'type': MESSAGE_TYPES['REPOSITORY_EVENT'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'event_type': event_type,
             'data': event_data,
             'source': 'resonance',
@@ -134,7 +134,7 @@ class ResonanceProducer:
         """
         message = {
             'type': MESSAGE_TYPES['HEARTBEAT'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'anchor': RESONANCE_CONFIG['anchor'],
             'frequency': RESONANCE_CONFIG['frequency'],
             's_roi': RESONANCE_CONFIG['s_roi_threshold'],

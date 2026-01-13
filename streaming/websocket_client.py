@@ -7,7 +7,7 @@ import asyncio
 import json
 import logging
 from typing import Dict, Any, Optional, Callable
-from datetime import datetime
+from datetime import datetime, timezone
 
 try:
     import websockets
@@ -15,6 +15,7 @@ try:
     WEBSOCKETS_AVAILABLE = True
 except ImportError:
     WEBSOCKETS_AVAILABLE = False
+    WebSocketClientProtocol = Any  # Type placeholder when websockets not available
     logging.warning("websockets library not installed. WebSocket functionality will be simulated.")
 
 from .config import MESSAGE_TYPES, NODE_ENDPOINTS, RESONANCE_CONFIG
@@ -107,7 +108,7 @@ class ResonanceWebSocketClient:
         """
         message = {
             'type': MESSAGE_TYPES['FREQUENCY_SYNC'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'frequency': frequency,
             's_roi': s_roi,
             'anchor': RESONANCE_CONFIG['anchor'],
@@ -124,7 +125,7 @@ class ResonanceWebSocketClient:
         """
         message = {
             'type': MESSAGE_TYPES['STATE_UPDATE'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'anchor': RESONANCE_CONFIG['anchor'],
             'data': state_data,
             'source': 'resonance',
@@ -141,7 +142,7 @@ class ResonanceWebSocketClient:
         """
         message = {
             'type': MESSAGE_TYPES['REPOSITORY_EVENT'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'event_type': event_type,
             'data': event_data,
             'source': 'resonance',
@@ -152,7 +153,7 @@ class ResonanceWebSocketClient:
         """Send heartbeat message"""
         message = {
             'type': MESSAGE_TYPES['HEARTBEAT'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'anchor': RESONANCE_CONFIG['anchor'],
             'source': 'resonance',
         }

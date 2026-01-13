@@ -6,7 +6,7 @@ Manages state synchronization across all connected nodes
 import asyncio
 import logging
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 from .kafka_producer import ResonanceProducer
 from .websocket_client import ResonanceWebSocketClient
@@ -26,7 +26,7 @@ class StateSynchronizer:
             'frequency': RESONANCE_CONFIG['frequency'],
             's_roi': RESONANCE_CONFIG['s_roi_threshold'],
             'anchor': RESONANCE_CONFIG['anchor'],
-            'last_update': datetime.utcnow().isoformat(),
+            'last_update': datetime.now(timezone.utc).isoformat(),
             'connected_nodes': [],
         }
         
@@ -52,7 +52,7 @@ class StateSynchronizer:
             updates: Dictionary of state updates
         """
         self.state.update(updates)
-        self.state['last_update'] = datetime.utcnow().isoformat()
+        self.state['last_update'] = datetime.now(timezone.utc).isoformat()
         logger.info(f"State updated: {updates}")
     
     def get_state(self) -> Dict[str, Any]:

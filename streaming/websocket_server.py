@@ -7,7 +7,7 @@ import asyncio
 import json
 import logging
 from typing import Dict, Any, Set, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 try:
     import websockets
@@ -15,6 +15,7 @@ try:
     WEBSOCKETS_AVAILABLE = True
 except ImportError:
     WEBSOCKETS_AVAILABLE = False
+    WebSocketServerProtocol = Any  # Type placeholder when websockets not available
     logging.warning("websockets library not installed. WebSocket functionality will be simulated.")
 
 from .config import WEBSOCKET_CONFIG, MESSAGE_TYPES, RESONANCE_CONFIG
@@ -52,7 +53,7 @@ class ResonanceWebSocketServer:
         # Send welcome message with current state
         await self.send_to_client(websocket, {
             'type': MESSAGE_TYPES['STATE_UPDATE'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'frequency': RESONANCE_CONFIG['frequency'],
             's_roi': RESONANCE_CONFIG['s_roi_threshold'],
             'anchor': RESONANCE_CONFIG['anchor'],
@@ -174,7 +175,7 @@ class ResonanceWebSocketServer:
         await self.send_to_client(websocket, {
             'type': 'ack',
             'original_type': MESSAGE_TYPES['FREQUENCY_SYNC'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
         })
     
     async def handle_state_update(self, websocket: WebSocketServerProtocol, message: Dict[str, Any]):
@@ -186,7 +187,7 @@ class ResonanceWebSocketServer:
         await self.send_to_client(websocket, {
             'type': 'ack',
             'original_type': MESSAGE_TYPES['STATE_UPDATE'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
         })
     
     async def handle_repository_event(self, websocket: WebSocketServerProtocol, message: Dict[str, Any]):
@@ -200,7 +201,7 @@ class ResonanceWebSocketServer:
         await self.send_to_client(websocket, {
             'type': 'ack',
             'original_type': MESSAGE_TYPES['REPOSITORY_EVENT'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
         })
     
     async def handle_heartbeat(self, websocket: WebSocketServerProtocol, message: Dict[str, Any]):
@@ -208,7 +209,7 @@ class ResonanceWebSocketServer:
         # Respond with heartbeat
         await self.send_to_client(websocket, {
             'type': MESSAGE_TYPES['HEARTBEAT'],
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'anchor': RESONANCE_CONFIG['anchor'],
         })
     
