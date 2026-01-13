@@ -1,0 +1,43 @@
+name: Sync Partners Documentation
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'README_PARTNERS.md'
+  workflow_dispatch:
+
+jobs:
+  sync-partners-doc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Resonance repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Check if sync is needed
+        id: check-sync
+        run: |
+          echo "Checking if README_PARTNERS.md needs sync with LexAmoris..."
+          # Check if file was modified in the last commit
+          if git diff HEAD^ HEAD --name-only | grep -q "README_PARTNERS.md"; then
+            echo "sync_needed=true" >> $GITHUB_OUTPUT
+            echo "README_PARTNERS.md was modified, sync needed"
+          else
+            echo "sync_needed=false" >> $GITHUB_OUTPUT
+            echo "No changes to README_PARTNERS.md"
+          fi
+      
+      - name: Notify about synchronization
+        if: steps.check-sync.outputs.sync_needed == 'true'
+        run: |
+          echo "README_PARTNERS.md synchronization triggered"
+          echo "In a production setup, this would:"
+          echo "  1. Checkout the LexAmoris repository"
+          echo "  2. Copy README_PARTNERS.md to the appropriate location"
+          echo "  3. Create a PR in the LexAmoris repository"
+          echo ""
+          echo "Note: Actual sync requires appropriate access tokens and repository URLs"
+          echo "Configure secrets.LEXAMORIS_PAT for cross-repo synchronization"
