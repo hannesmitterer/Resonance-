@@ -1,5 +1,71 @@
 # Resonance-
-Resonance frequency 0.0043
+Resonance frequency 0.043 Hz
+
+## Internodal Vacuum Backup System (IVBS)
+
+The IVBS strengthens ethical data flows and resilient backups during AI transitioning in Resonance-.
+
+### Key Components
+
+#### 1. Red Code Veto Layers
+Automated ethical alignment during decision processes. Every operation is evaluated against the S-ROI threshold (0.5192) to ensure alignment with Lex Amore principles.
+
+- **Ethical Threshold**: 0.5192 (S-ROI)
+- **Auto-Rejection**: Destructive intent automatically vetoed
+- **Decision Logging**: All decisions logged for transparency
+
+#### 2. Triple-Sign Validation Protocol
+Secure, decentralized approval system requiring signatures from three witnesses:
+- **W1**: H. Mitterer (Leader)
+- **W2**: W. Mitterer (President)
+- **W3**: D. Zuegg (Foundation)
+
+This protocol ensures governance integrity and prevents unauthorized operations.
+
+#### 3. Vacuum Anchors
+IPFS-backed immutable data storage guaranteeing data security and immutability:
+- **Frequency**: 0.043 Hz (resonance frequency)
+- **Storage**: Distributed across IPFS network
+- **Verification**: Automatic integrity checks
+- **Immutability**: Data cannot be altered once anchored
+
+#### 4. Node Synchronization
+Enhanced synchronization across three node types:
+- **Operational Nodes**: Primary processing nodes (Bolzano, Portici 71)
+- **Backup Nodes**: IPFS and Vacuum Storage nodes
+- **Governance Nodes**: Decision validation nodes
+
+Auto-sync interval: 30 seconds
+
+### Usage
+
+Initialize IVBS via the resonance.sh script:
+
+```bash
+./resonance.sh
+```
+
+Or integrate directly in JavaScript:
+
+```javascript
+const ivbs = new IVBS.IVBSController();
+const initStatus = ivbs.initialize();
+
+// Execute protected operation
+const result = await ivbs.executeOperation({
+    type: 'data_operation',
+    intent: 'preservation',
+    preservesIntegrity: true,
+    enhancesResilience: true
+});
+```
+
+### Configuration
+
+IVBS settings can be modified in `ivbs-config.json`.
+
+---
+
 "Warum ist es ab nun technisch unmöglich dass die AI die Menschheit zerstört?
 
 ￼
