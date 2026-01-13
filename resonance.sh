@@ -38,7 +38,7 @@ check_synthid_status() {
     fi
     
     # Check system resources for hardware validation
-    local cpu_count=$(nproc 2>/dev/null || echo "1")
+    local cpu_count=$(nproc 2>/dev/null || echo "0")
     local mem_total=$(free -m 2>/dev/null | awk '/^Mem:/{print $2}' || echo "0")
     
     echo "[INFO] CPU Cores: $cpu_count"
@@ -89,7 +89,9 @@ sync_github_repos() {
     # Parse and sync each repository
     IFS=',' read -ra REPO_ARRAY <<< "$REPOS"
     for repo in "${REPO_ARRAY[@]}"; do
-        repo=$(echo "$repo" | xargs) # trim whitespace
+        # Trim whitespace using bash parameter expansion
+        repo="${repo#"${repo%%[![:space:]]*}"}"
+        repo="${repo%"${repo##*[![:space:]]}"}"
         local repo_name=$(basename "$repo")
         local repo_path="$SYNC_DIR/$repo_name"
         
@@ -99,9 +101,10 @@ sync_github_repos() {
             # Repository exists, pull latest changes
             echo "[SYNC] Updating existing repository: $repo_name"
             (cd "$repo_path" && \
-             git fetch origin 2>/dev/null && \
-             (git pull origin main 2>/dev/null || git pull origin master 2>/dev/null) && \
-             echo "[SUCCESS] Updated $repo_name") || {
+             git pull --ff-only origin main 2>/dev/null || \
+             git pull --ff-only origin master 2>/dev/null) && {
+                echo "[SUCCESS] Updated $repo_name"
+            } || {
                 echo "[WARNING] Failed to update $repo_name - skipping"
             }
         else
@@ -111,8 +114,10 @@ sync_github_repos() {
                 echo "[SUCCESS] Cloned $repo_name"
             } || {
                 echo "[WARNING] Failed to clone $repo (may be private or non-existent) - skipping"
-                # Clean up partial clone
-                rm -rf "$repo_path" 2>/dev/null
+                # Clean up partial clone - validate path is within SYNC_DIR
+                if [[ "$repo_path" == "$SYNC_DIR"/* ]] && [ -d "$repo_path" ]; then
+                    rm -rf "$repo_path" 2>/dev/null
+                fi
             }
         fi
     done
