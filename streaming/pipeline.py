@@ -113,7 +113,7 @@ async def main():
     pipeline = ResonancePipeline()
     
     # Setup signal handlers
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     for sig in (signal.SIGTERM, signal.SIGINT):
         loop.add_signal_handler(sig, lambda s=sig: pipeline.handle_shutdown(s))
     
