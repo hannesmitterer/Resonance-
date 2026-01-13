@@ -2,6 +2,7 @@
 # =================================================================
 # CONFIGURATION VALIDATION SCRIPT
 # Validates all Resonance- framework configurations
+# Note: Does not use -e flag to allow graceful error reporting
 # =================================================================
 
 echo "==================================================="
@@ -142,18 +143,37 @@ validate_system_parameters() {
     
     # Check S-ROI value
     echo -n "  Checking S-ROI value... "
-    local sroi=$(python3 -c "import json; data=json.load(open('$file')); print(data['resonanceFramework']['systemParameters']['sROI']['current'])" 2>/dev/null)
     
-    if [ -n "$sroi" ]; then
-        if (( $(echo "$sroi >= 0.4500" | bc -l) )); then
-            echo -e "${GREEN}✓${NC} ($sroi)"
+    # Check if bc is available, otherwise use awk
+    if command -v bc &> /dev/null; then
+        local sroi=$(python3 -c "import json; data=json.load(open('$file')); print(data['resonanceFramework']['systemParameters']['sROI']['current'])" 2>/dev/null)
+        
+        if [ -n "$sroi" ]; then
+            if (( $(echo "$sroi >= 0.4500" | bc -l) )); then
+                echo -e "${GREEN}✓${NC} ($sroi)"
+            else
+                echo -e "${YELLOW}⚠${NC} ($sroi - below recommended minimum)"
+                WARNINGS=$((WARNINGS + 1))
+            fi
         else
-            echo -e "${YELLOW}⚠${NC} ($sroi - below recommended minimum)"
-            WARNINGS=$((WARNINGS + 1))
+            echo -e "${RED}✗${NC}"
+            ERRORS=$((ERRORS + 1))
         fi
     else
-        echo -e "${RED}✗${NC}"
-        ERRORS=$((ERRORS + 1))
+        # Fallback to awk if bc is not available
+        local sroi=$(python3 -c "import json; data=json.load(open('$file')); print(data['resonanceFramework']['systemParameters']['sROI']['current'])" 2>/dev/null)
+        
+        if [ -n "$sroi" ]; then
+            if awk -v s="$sroi" 'BEGIN {exit !(s >= 0.4500)}'; then
+                echo -e "${GREEN}✓${NC} ($sroi)"
+            else
+                echo -e "${YELLOW}⚠${NC} ($sroi - below recommended minimum)"
+                WARNINGS=$((WARNINGS + 1))
+            fi
+        else
+            echo -e "${RED}✗${NC}"
+            ERRORS=$((ERRORS + 1))
+        fi
     fi
     
     # Check frequency

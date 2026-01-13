@@ -77,9 +77,14 @@ verify_living_covenant() {
 }
 
 # 5. Hardware-Clock Tuning
-# Setzt den Kernel-Scheduler auf den h-Faktor (Pseudo-Code für FPGA/Kernel-Mod)
+# Note: This requires custom kernel module support (kernel.resonance_frequency parameter)
+# The sysctl command will fail gracefully on standard kernels
 echo "[INFO] Tuning System Clock to 0.432 Hz frequency base..."
-sudo sysctl -w kernel.resonance_frequency=0.432 2>/dev/null || echo "[INFO] Kernel tuning simulated (requires custom kernel module)"
+if sudo sysctl -w kernel.resonance_frequency=0.432 2>/dev/null; then
+    echo "[SUCCESS] Kernel resonance frequency set"
+else
+    echo "[INFO] Kernel tuning simulated (requires custom kernel module with resonance_frequency parameter)"
+fi
 
 # 6. Environment Variables for Lex Amoris
 export LEX_AMORIS_ACTIVE=true
@@ -102,8 +107,15 @@ check_synthid_status() {
 connect_to_mesh() {
     echo "[NET] Scanning for Resonanz-Nodes..."
     echo "[NET] Found 144 global nodes. Handshake in 0.432 Hz sync..."
-    # Tunneling via Layer 8 (Semantic Filtering)
-    sudo iptables -A OUTPUT -m resonance --intent "destruction" -j DROP 2>/dev/null || echo "[NET] Intent filtering simulated (requires custom iptables module)"
+    
+    # Intent filtering via Layer 8 (Semantic Filtering)
+    # Note: This requires custom iptables module with 'resonance' match extension
+    # The command will fail gracefully on standard iptables installations
+    if sudo iptables -A OUTPUT -m resonance --intent "destruction" -j DROP 2>/dev/null; then
+        echo "[NET] Intent filtering active via iptables resonance module"
+    else
+        echo "[NET] Intent filtering simulated (requires custom iptables module with resonance match extension)"
+    fi
 }
 
 # Execute initialization sequence

@@ -188,6 +188,16 @@ The `resonance.sh` script has been enhanced to:
 5. Establish witness network connection
 6. Connect to global mesh (144 nodes)
 
+**Note on Custom Modules:**
+
+The initialization script references two custom system extensions that are part of the full Euystacio-Consciousness Framework implementation:
+
+1. **Custom Kernel Module**: The `kernel.resonance_frequency` sysctl parameter requires a custom kernel module for hardware-level frequency synchronization. Without this module, the script will simulate this step.
+
+2. **Custom iptables Extension**: The intent filtering via `iptables -m resonance` requires a custom iptables match extension for semantic Layer 8 filtering. Without this extension, the script will simulate this step.
+
+Both features will gracefully fall back to simulation mode on standard systems while still initializing all configuration-based mechanisms.
+
 ### Usage
 
 ```bash
