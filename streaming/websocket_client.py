@@ -168,11 +168,12 @@ class ResonanceWebSocketClient:
         try:
             async for message in self.websocket:
                 await self.process_message(message)
-        except websockets.exceptions.ConnectionClosed:
-            logger.info(f"Connection to {self.node_name} closed")
-            self.is_connected = False
         except Exception as e:
-            logger.error(f"Error listening to {self.node_name}: {e}")
+            # Handle any connection errors (including websockets.exceptions.ConnectionClosed)
+            if "ConnectionClosed" in str(type(e).__name__):
+                logger.info(f"Connection to {self.node_name} closed")
+            else:
+                logger.error(f"Error listening to {self.node_name}: {e}")
             self.is_connected = False
     
     async def process_message(self, raw_message: str):

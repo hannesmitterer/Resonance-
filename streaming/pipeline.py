@@ -81,8 +81,8 @@ class ResonancePipeline:
     
     async def run_kafka_consumer(self):
         """Run Kafka consumer in async loop"""
-        loop = asyncio.get_event_loop()
         while self.is_running:
+            loop = asyncio.get_running_loop()
             await loop.run_in_executor(None, self.kafka_consumer.process_messages, 1000, 10)
             await asyncio.sleep(0.1)
     

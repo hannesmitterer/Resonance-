@@ -122,10 +122,12 @@ class ResonanceWebSocketServer:
         try:
             async for message in websocket:
                 await self.process_message(websocket, message)
-        except websockets.exceptions.ConnectionClosed:
-            logger.info("Client connection closed")
         except Exception as e:
-            logger.error(f"Error handling client: {e}")
+            # Handle any connection errors (including websockets.exceptions.ConnectionClosed)
+            if "ConnectionClosed" in str(type(e).__name__):
+                logger.info("Client connection closed")
+            else:
+                logger.error(f"Error handling client: {e}")
         finally:
             await self.unregister_client(websocket)
     
