@@ -1,0 +1,11 @@
+# Resonance Streaming Pipeline Requirements
+# Python packages required for the streaming infrastructure
+
+# Kafka support
+kafka-python>=2.0.2
+
+# WebSocket support
+websockets>=12.0
+
+# Async utilities
+aiofiles>=23.0.0

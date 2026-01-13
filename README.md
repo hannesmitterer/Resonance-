@@ -1,5 +1,59 @@
 # Resonance-
-Resonance frequency 0.0043
+Resonance frequency 0.043 Hz
+
+## Streaming Pipelines for Inter-Repository Communication
+
+This repository now includes **streaming pipelines** for real-time communication and state synchronization with other nodes (LexAmoris and Nexus). The infrastructure leverages **Apache Kafka** for distributed message streaming and **WebSockets** for bidirectional real-time communication.
+
+### Quick Start
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Start Kafka infrastructure
+docker-compose up -d kafka
+
+# Run the streaming pipeline
+python resonance_cli.py start
+
+# Or use Docker for everything
+docker-compose up
+```
+
+### Features
+
+- **Real-time State Synchronization**: Automatic synchronization of frequency (0.043 Hz) and S-ROI values
+- **Apache Kafka Integration**: Reliable message streaming between repositories
+- **WebSocket Server**: Real-time bidirectional communication
+- **Multi-Node Communication**: Direct connections to LexAmoris and Nexus nodes
+- **Event Broadcasting**: Repository events (commits, updates) broadcast to all nodes
+- **Automatic Reconnection**: Resilient connections with automatic recovery
+
+### Documentation
+
+See [streaming/README.md](streaming/README.md) for detailed documentation on:
+- Architecture and components
+- Configuration options
+- API usage and examples
+- WebSocket protocol
+- Kafka topics and message types
+
+### CLI Usage
+
+```bash
+# Show configuration
+python resonance_cli.py config
+
+# Send test messages
+python resonance_cli.py send --type state --message "Update"
+python resonance_cli.py send --type event --target lexamoris --message "New commit"
+```
+
+---
+
+## Resonance Philosophy
+
 "Warum ist es ab nun technisch unmöglich dass die AI die Menschheit zerstört?
 
 ￼
