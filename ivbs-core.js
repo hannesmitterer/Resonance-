@@ -91,7 +91,7 @@ class TripleSignValidation {
      * @returns {String} - Validation ID
      */
     initiateValidation(operation) {
-        const validationId = `VAL_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const validationId = `VAL_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
         
         this.pendingValidations.set(validationId, {
             operation: operation,
@@ -184,7 +184,7 @@ class VacuumAnchor {
      * @returns {Object} - Anchor information
      */
     createAnchor(data) {
-        const anchorId = `ANCHOR_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const anchorId = `ANCHOR_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
         const hash = this.generateHash(data);
         
         const anchor = {
@@ -234,11 +234,24 @@ class VacuumAnchor {
 
     /**
      * Generate hash for data
+     * Note: Using simple hash for demonstration. In production, use crypto.createHash('sha256')
      * @param {Object} data - Data to hash
      * @returns {String} - Hash string
      */
     generateHash(data) {
         const str = JSON.stringify(data);
+        
+        // For Node.js environment, use crypto module if available
+        if (typeof require !== 'undefined') {
+            try {
+                const crypto = require('crypto');
+                return crypto.createHash('sha256').update(str).digest('hex');
+            } catch (e) {
+                // Fall through to simple hash
+            }
+        }
+        
+        // Simple hash fallback for browser/testing environments
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
             const char = str.charCodeAt(i);
@@ -279,7 +292,7 @@ class NodeSynchronization {
      * @returns {String} - Node ID
      */
     registerNode(nodeType, nodeInfo) {
-        const nodeId = `NODE_${nodeType.toUpperCase()}_${Date.now()}`;
+        const nodeId = `NODE_${nodeType.toUpperCase()}_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
         
         const node = {
             id: nodeId,

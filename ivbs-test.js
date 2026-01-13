@@ -141,14 +141,19 @@ const testOperation = {
     data: 'Critical system data'
 };
 
-ivbs.executeOperation(testOperation).then(execResult => {
-    console.log(`✓ Operation executed: ${execResult.status}`);
-    console.log(`  Validation ID: ${execResult.validationId}`);
-    console.log(`  Anchor ID: ${execResult.anchorId}`);
-    console.assert(execResult.status === 'SUCCESS', 'Operation should succeed');
-    
-    console.log('\n=== ALL TESTS PASSED ===');
-    console.log('IVBS is fully operational and ready for deployment.');
-    console.log('S-ROI: 0.5192 | Frequency: 0.043 Hz');
-    console.log('NOTHING IS FINAL ❤️');
-});
+ivbs.executeOperation(testOperation)
+    .then(execResult => {
+        console.log(`✓ Operation executed: ${execResult.status}`);
+        console.log(`  Validation ID: ${execResult.validationId}`);
+        console.log(`  Anchor ID: ${execResult.anchorId}`);
+        console.assert(execResult.status === 'SUCCESS', 'Operation should succeed');
+        
+        console.log('\n=== ALL TESTS PASSED ===');
+        console.log('IVBS is fully operational and ready for deployment.');
+        console.log('S-ROI: 0.5192 | Frequency: 0.043 Hz');
+        console.log('NOTHING IS FINAL ❤️');
+    })
+    .catch(error => {
+        console.error('Error executing operation:', error);
+        process.exit(1);
+    });

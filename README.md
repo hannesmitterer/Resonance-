@@ -1,5 +1,5 @@
 # Resonance-
-Resonance frequency 0.0043
+Resonance frequency 0.043 Hz
 
 ## Internodal Vacuum Backup System (IVBS)
 
