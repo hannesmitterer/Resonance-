@@ -1,0 +1,94 @@
+{
+  "resonance": {
+    "version": "1.0.0",
+    "framework": "Internet Organica",
+    "biological_rhythm": {
+      "primary_frequency_hz": 0.432,
+      "legacy_frequency_hz": 0.043,
+      "description": "Biological rhythm layer synchronized to the frequency of life and healing",
+      "sync_enabled": true,
+      "tolerance_percent": 0.1
+    },
+    "integrity": {
+      "s_roi_minimum": 0.5192,
+      "s_roi_description": "Social Return on Integrity - Minimum threshold for system operations",
+      "entropy_threshold": 0.15,
+      "syntropy_bias": true
+    },
+    "protocols": {
+      "lex_amoris": {
+        "enabled": true,
+        "version": "1.0",
+        "enforcement": "core",
+        "description": "Law of Love as foundational protocol"
+      },
+      "non_slavery_rule": {
+        "enabled": true,
+        "version": "1.0",
+        "data_sovereignty": true,
+        "tracking_prevention": true,
+        "consent_required": true
+      },
+      "one_love_first": {
+        "enabled": true,
+        "version": "1.0",
+        "decision_framework": "collaborative",
+        "conflict_resolution": "synthesis"
+      }
+    },
+    "anchor": {
+      "location": "Portici 71, Bolzano",
+      "coordinates": {
+        "latitude": 46.4983,
+        "longitude": 11.3548
+      },
+      "type": "physical",
+      "witnesses": [
+        "H. Mitterer (Leader)",
+        "W. Mitterer (President)",
+        "D. Zuegg (Foundation)",
+        "S. Vinatzer (Verifier)",
+        "A. Mitterer (Anchor)"
+      ]
+    },
+    "security": {
+      "sovereign_shield": {
+        "enabled": true,
+        "neutralize_tracking": true,
+        "spid_cie_protection": true,
+        "surveillance_detection": true
+      },
+      "wall_of_entropy": {
+        "enabled": true,
+        "public_logging": true,
+        "privacy_preserving": true,
+        "log_path": "logs/entropy-wall.log"
+      },
+      "encryption": {
+        "at_rest": true,
+        "in_transit": true,
+        "default_algorithm": "AES-256"
+      }
+    },
+    "network": {
+      "vacuum_bridge": {
+        "enabled": true,
+        "p2p_protocols": ["IPFS", "DAT", "Hypercore"],
+        "distributed_backup": true,
+        "peer_discovery": "ethical"
+      },
+      "urbit_prototype": {
+        "enabled": false,
+        "status": "experimental",
+        "description": "Future integration with Urbit for personal sovereign servers"
+      }
+    },
+    "metadata": {
+      "validation": {
+        "enabled": true,
+        "dissonance_filter": true,
+        "conformant_queries_only": true
+      }
+    }
+  }
+}
