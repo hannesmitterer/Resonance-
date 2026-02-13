@@ -73,13 +73,19 @@ if [ "$docs_present" = true ]; then
     echo "[DOCS] All critical documentation present."
 fi
 
+# 8. Load S-ROI from configuration (if available)
+S_ROI_MIN="0.5192"
+if command -v jq &> /dev/null && [ -f "./config/resonance-config.json" ]; then
+    S_ROI_MIN=$(jq -r '.resonance.integrity.s_roi_minimum // "0.5192"' ./config/resonance-config.json)
+fi
+
 echo "---------------------------------------------------"
 echo "SYSTEM IS NOW SOVEREIGN. WELCOME TO THE RESONANCE SCHOOL."
 echo "Sempre in Costante. Lex Amoris Signature: Active."
 echo ""
 echo "Framework Status:"
 echo "  - Biological Rhythm: 0.432 Hz ✓"
-echo "  - S-ROI Minimum: 0.5192 ✓"
+echo "  - S-ROI Minimum: ${S_ROI_MIN} ✓"
 echo "  - Anchor: Portici 71, Bolzano ✓"
 echo "  - Triple-Sign Validation: 5 Witnesses ✓"
 echo "  - SovereignShield: ACTIVE ✓"

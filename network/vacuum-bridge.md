@@ -30,6 +30,9 @@ async function storeOnIPFS(content) {
     repo: './ipfs-repo',
     config: {
       Addresses: {
+        // Example swarm address - replace with your actual bootstrap nodes
+        // For production, use: /ip4/YOUR_NODE_IP/tcp/4001
+        // or public gateways: /dns4/ipfs.io/tcp/443/wss
         Swarm: ['/dns4/ipfs.resonance-school.org/tcp/4001/wss']
       }
     }

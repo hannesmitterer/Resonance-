@@ -58,11 +58,11 @@ async function validateIdentity(request) {
   
   // Authenticated access
   const identity = await verifyAuthToken(request.auth);
-  const s_roi = await getSOI(identity);
+  const s_roi = await getSROI(identity);
   const history = await getBehaviorHistory(identity);
   
   return {
-    valid: s_roi >= MIN_SOI,
+    valid: s_roi >= MIN_SROI,
     identity: identity,
     s_roi: s_roi,
     trust_level: calculateTrustLevel(s_roi, history)

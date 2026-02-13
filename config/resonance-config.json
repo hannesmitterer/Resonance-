@@ -73,7 +73,11 @@
     "network": {
       "vacuum_bridge": {
         "enabled": true,
-        "p2p_protocols": ["IPFS", "DAT", "Hypercore"],
+        "p2p_protocols": [
+          "IPFS",
+          "DAT",
+          "Hypercore"
+        ],
         "distributed_backup": true,
         "peer_discovery": "ethical"
       },
@@ -90,5 +94,9 @@
         "conformant_queries_only": true
       }
     }
+  },
+  "_comments": {
+    "frequency_note": "The primary_frequency_hz (0.432 Hz) is the biological rhythm layer for life and healing. The legacy_frequency_hz (0.043 Hz) represents the original resonance frequency and is maintained for backward compatibility and historical reference.",
+    "s_roi_note": "S-ROI minimum of 0.5192 represents the threshold where Social Return on Integrity ensures syntropic (life-serving) operation over entropic (destructive) behavior."
   }
 }
