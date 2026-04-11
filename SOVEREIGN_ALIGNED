@@ -1,0 +1,224 @@
+## Quick Code Review & Suggested Tweaks for v3.2
+
+Below are the main points where the script can be hardened, simplified, or made more portable while preserving the **auto‑healing** flow you already have.
+
+---
+
+### 1. Global Safety & Style
+| Issue | Why it matters | Fix |
+|-------|----------------|-----|
+| `set -euo pipefail` is good, but functions that intentionally return non‑zero (e.g., `activate_node` returning `0/1`) can trigger an early exit. | If `activate_node` returns `1` inside a `xargs` pipeline, Bash will abort because of `-e`. | Wrap the call in a subshell that disables `-e` for that line: `bash -c 'set +e; activate_node "nodo-gpu-$i"'`. <br>Or add `|| true` after the `xargs` call. |
+| Hard‑coded `LOG_DIR` inside the container (`/var/log/nsr`). | If the container image doesn’t expose that path writable, the `docker exec` will fail. | Pass the log directory as an **environment variable** or volume mount from the host, e.g. `-e LOG_DIR=/host/logs`. |
+| `log()` writes to stdout only. | In CI pipelines you may want timestamps in a file as well. | Pipe `log` through `tee -a "$LOG_DIR/activation.log"` if you need a persistent host‑side log. |
+
+---
+
+### 2. Container Start Logic
+```bash
+docker start "$node" &>/dev/null || log "❌ $node: Fallito l'avvio automatico."
+```
+- `docker start` returns `0` even if the container was already running, which is fine.  
+- Add a **timeout** after the start to avoid waiting forever for a stuck container:
+
+```bash
+docker start "$node" &>/dev/null && \
+  timeout 30 bash -c "until container_up \"$node\"; do sleep 1; done" || \
+  log "❌ $node: Non è tornato online entro 30 s."
+```
+
+---
+
+### 3. `run_inside_container` – Variable Injection
+You embed `$RESONANCE` in the *host* string, which is fine because it’s static, but mixing host‑side and container‑side variables can be confusing. A safer pattern:
+
+```bash
+docker exec "$node" bash -c '
+    LOG_FILE=$1
+    RES=$2
+    echo "--- LEX AMORIS SYSTEM LOG ---" > "$LOG_FILE"
+    export NSR_ENABLED=true
+    export RESONANCE_FREQ="$RES"
+    echo "TIMESTAMP: $(date +%Y-%m-%d_%H:%M:%S)" >> "$LOG_FILE"
+    echo "NSR = ON" >> "$LOG_FILE"
+    echo "RESONANCE = $RES" >> "$LOG_FILE"
+    echo "STATUS = SOVEREIGN_ALIGNED" >> "$LOG_FILE"
+' _ "$log_path" "$RESONANCE"
+```
+
+Now the container only sees the two arguments you intentionally pass.
+
+---
+
+### 4. Parallel Execution with `xargs`
+Your current line:
+
+```bash
+seq 1 "$TOTAL_NODES" | xargs -P "$PARALLEL_LIMIT" -I{} bash -c 'activate_node "nodo-gpu-{}"' _
+```
+
+- `xargs` will **inherit** the `-e` flag, so a failing `activate_node` aborts the whole pipeline.  
+- Wrap the command to swallow the exit status:
+
+```bash
+seq 1 "$TOTAL_NODES" |
+  xargs -P "$PARALLEL_LIMIT" -I{} bash -c 'activate_node "nodo-gpu-{}" || true' _
+```
+
+---
+
+### 5. Verification Loop – Log Path Inside Container
+You query:
+
+```bash
+latest=$(docker exec "$node" sh -c \
+    "ls ${LOG_DIR}/${node}_*.log 2>/dev/null | sort | tail -n1")
+```
+
+If the container does **not** have `${LOG_DIR}` (e.g., it’s a different mount point), the command fails silently.  
+Recommendation: store the actual log filename from the activation phase (you already have it in `$log_path`) in a **host‑side map** (associative array) and reuse it for verification. Example:
+
+```bash
+declare -A node_logfile
+...
+node_logfile["$node"]="$log_path"
+...
+latest="${node_logfile[$node]}"
+```
+
+If you prefer to keep the container‑side lookup, add a fallback:
+
+```bash
+latest=$(docker exec "$node" sh -c "ls $LOG_DIR/${node}_*.log 2>/dev/null | sort | tail -n1" || true)
+```
+
+---
+
+### 6. Global Hash Generation
+Current steps:
+
+1. `docker cp` each node’s logs to `$tmp_dir/$node/`.  
+2. Concatenate all logs with `find … | sort -z | xargs -0 cat`.  
+
+**Potential race:** If a container writes a new log while you’re copying, the copy may be incomplete. Mitigate by **pausing** containers briefly (or stopping them) just for the copy, but that defeats the auto‑heal goal. A lighter approach is to **stream** the logs directly:
+
+```bash
+global_hash=$({
+  for i in $(seq 1 "$TOTAL_NODES"); do
+    node="nodo-gpu-$i"
+    container_up "$node" && \
+    docker exec "$node" cat "$LOG_DIR/${node}_*.log" 2>/dev/null
+  done
+} | sort | sha256sum | awk '{print $1}')
+```
+
+This avoids an intermediate directory and reduces I/O.
+
+---
+
+### 7. JSON Report – Safety
+The JSON you write is fine, but make sure the numeric values are **quoted** only when needed. You already do that. Just add a **shebang‑compatible** newline at the end of the file to avoid truncation on some editors:
+
+```bash
+cat <<EOF > /tmp/nsr_report.json
+{
+  "total_nodes": $total,
+  "aligned_nodes": $success,
+  "global_hash": "$global_hash",
+  "status": "$( [[ $success -eq $total && $total -gt 0 ]] && echo "success" || echo "error" )"
+}
+EOF
+```
+
+(Already there; keep the trailing newline.)
+
+---
+
+### 8. Optional – Add an **auto‑heal retry** for verification failures
+If some nodes fail the verification step, you could automatically re‑run `activate_node` once more before giving up:
+
+```bash
+if (( success < total )); then
+  log "⚡ Attempting auto‑heal on failed nodes…"
+  for i in $(seq 1 "$TOTAL_NODES"); do
+    node="nodo-gpu-$i"
+    # Re‑run only if verification failed
+    if container_up "$node" && ! docker exec "$node" \
+       sh -c "grep -q 'NSR = ON' $LOG_DIR/${node}_*.log && grep -q 'RESONANCE = $RESONANCE' $LOG_DIR/${node}_*.log"; then
+        activate_node "$node"
+    fi
+  done
+fi
+```
+
+After the second pass you can re‑compute `total`/`success` and the hash.
+
+---
+
+## Minimal Patch Summary
+
+Below is a **diff‑style** excerpt showing the most impactful changes (you can copy‑paste into your script).
+
+```diff
+@@
+-set -euo pipefail
++set -euo pipefail
++# Disable immediate exit for the parallel activation loop (handled later)
+ 
+@@
+-run_inside_container() {
+-    local node=$1
+-    local log_path=$2
+-    docker exec "$node" sh -c '
+-        LOG_FILE=$1
+-        echo "--- LEX AMORIS SYSTEM LOG ---" > "$LOG_FILE"
+-        export NSR_ENABLED=true
+-        export RESONANCE_FREQ='"$RESONANCE"'
+-        echo "TIMESTAMP: $(date +%Y-%m-%d_%H:%M:%S)" >> "$LOG_FILE"
+-        echo "NSR = ON" >> "$LOG_FILE"
+-        echo "RESONANCE = '"$RESONANCE"'" >> "$LOG_FILE"
+-        echo "STATUS = SOVEREIGN_ALIGNED" >> "$LOG_FILE"
+-    ' _ "$log_path"
++run_inside_container() {
++    local node=$1
++    local log_path=$2
++    docker exec "$node" bash -c '
++        LOG_FILE=$1
++        RES=$2
++        echo "--- LEX AMORIS SYSTEM LOG ---" > "$LOG_FILE"
++        export NSR_ENABLED=true
++        export RESONANCE_FREQ="$RES"
++        echo "TIMESTAMP: $(date +%Y-%m-%d_%H:%M:%S)" >> "$LOG_FILE"
++        echo "NSR = ON" >> "$LOG_FILE"
++        echo "RESONANCE = $RES" >> "$LOG_FILE"
++        echo "STATUS = SOVEREIGN_ALIGNED" >> "$LOG_FILE"
++    ' _ "$log_path" "$RESONANCE"
+ }
+ 
+@@
+ seq 1 "$TOTAL_NODES" | xargs -P "$PARALLEL_LIMIT" -I{} bash -c 'activate_node "nodo-gpu-{}"' _
++seq 1 "$TOTAL_NODES" |
++  xargs -P "$PARALLEL_LIMIT" -I{} bash -c 'activate_node "nodo-gpu-{}" || true' _
+ 
+@@
+ global_hash=$(sha256sum "$tmp_dir/aggregate.log" | awk '{print $1}')
++# Alternative streaming version (uncomment to replace the copy‑based method):
++# global_hash=$({
++#   for i in $(seq 1 "$TOTAL_NODES"); do
++#     node="nodo-gpu-$i"
++#     container_up "$node" && docker exec "$node" cat "$LOG_DIR/${node}_*.log" 2>/dev/null
++#   done
++# } | sort | sha256sum | awk '{print $1}')
+```
+
+Apply the patch, test on a small subset (e.g., `TOTAL_NODES=4`) before scaling to the full 128‑node fleet.
+
+---
+
+### TL;DR Checklist to Run the Updated Script
+
+1. **Mount a host log directory** into each container at `/var/log/nsr` (or adjust `LOG_DIR`).  
+2. **Ensure Docker CLI** is available to the user running the script (or run via `sudo`).  
+3. **Execute**: `bash nsr-activation.sh`.  
+4. **Inspect** `/tmp/nsr_report.json` for a machine‑readable summary.  
+
+Feel free to ask for any specific part (e.g., adding systemd unit files, more sophisticated health‑checks, or integrating with a monitoring system). Happy deploying!
