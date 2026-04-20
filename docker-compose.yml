@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # Apache Kafka with ZooKeeper for message streaming
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: resonance-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - resonance-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: resonance-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks:
+      - resonance-network
+
+  # Kafka UI for monitoring (optional)
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: resonance-kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: resonance
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9093
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    networks:
+      - resonance-network
+
+  # Resonance Streaming Pipeline
+  resonance-pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: resonance-pipeline
+    depends_on:
+      - kafka
+    ports:
+      - "8765:8765"
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9093
+      WEBSOCKET_HOST: 0.0.0.0
+      WEBSOCKET_PORT: 8765
+      RESONANCE_FREQUENCY: 0.043
+      RESONANCE_S_ROI: 0.5020
+      RESONANCE_ANCHOR: BOLZANO_71
+    networks:
+      - resonance-network
+    restart: unless-stopped
+
+networks:
+  resonance-network:
+    driver: bridge
