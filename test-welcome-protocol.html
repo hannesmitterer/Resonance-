@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>UIFS Welcome Protocol Test</title>
+</head>
+<body>
+    <h1>Testing UIFS Global Welcome Protocol</h1>
+    <p>Click the button below to clear localStorage and trigger the welcome modal again.</p>
+    <button onclick="clearAndReload()">Clear localStorage & Reload</button>
+    
+    <script>
+        function clearAndReload() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
